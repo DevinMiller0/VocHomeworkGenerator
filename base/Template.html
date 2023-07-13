@@ -1,0 +1,152 @@
+<html>
+
+<head>
+
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+    .jumbotron {
+      background: #F0F0F0 !important;
+    }
+
+    .btn {
+      background: rgb(66, 133, 243) !important;
+    }
+
+    body {
+      background-color:#d9ede1;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    tbody td:nth-child(2) {
+      content: attr(data-label);
+      display: inline-block;
+      font-weight: bold;
+      margin-right: 5px;
+      color: #111;
+    }
+
+
+    /* table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+    }
+
+    thead {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      border-bottom: 2px solid #333;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tbody td:before {
+      content: attr(data-label);
+      display: inline-block;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    @media screen and (max-width: 767px) {
+      thead {
+        display: none;
+      }
+
+      tbody td:before {
+        content: attr(data-label);
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    } */
+  </style>
+
+<body>
+  <!-- <div id="pageHeader">
+    <div class="container">
+      <span class="label label-default">JSON2PDF</span>
+    </div>
+  </div> -->
+  <h3>JSON2PDF</h3>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <colgroup>
+        <col style="width: 70%;">
+        <col style="width: 30%;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Answer</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr>
+          <td>1</td>
+          <td>张三</td>
+          <td>25</td>
+          <td>北京</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>李四</td>
+          <td>30</td>
+          <td>上海</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>王五</td>
+          <td>20</td>
+          <td>广州</td>
+        </tr>
+      </tbody> -->
+
+      {TBBODY}
+    </table>
+  </div>
+
+
+  <div class="table-responsive">
+
+
+
+<!-- <table  class='table'  style='width:100%;word-break:break-word; background-color:white'>
+  <tr>
+  <th >Question</th>
+  <th >Answer</th>
+  </tr>
+</table> -->
+
+  </div>
+
+</body>
+
+</html>
