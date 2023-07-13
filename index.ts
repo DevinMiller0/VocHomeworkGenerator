@@ -7,41 +7,65 @@
 let pdf = require("html-pdf");
 const path = require("path");
 
+// use openAI
+ const { generateExamples } = require("./src/openaiConf");
+
 let fs = require("fs");
 global.appRoot = path.resolve(__dirname);
 
 const PLACEHOLDER = "{TBBODY}";
 
-let tbody = "";
 
-tbody += "<tbody>";
 
-let array = [
-  { key_one: "He carefully ______ the onions into small pieces before adding them to the pot of soup.", key_two: "chop" },
-  { key_one: "123", key_two: "test" },
-];
-array.forEach(function (row) {
-  tbody += "<tr>";
-  tbody += "<td>" + row.key_one + "</td>";
-  tbody += "<td>" + row.key_two + "</td>";
-  tbody += "</tr>";
-});
-tbody += "</tbody>";
+async function main() {
+  let tbody = "";
 
-let options = {
-  format: "A4",
-  orientation: "portrait",
-  timeout: "12000",
-  base: "",
-};
+  tbody += "<tbody>";
 
-let htmlTemplate = fs.readFileSync("./base/Template.html", "utf8");
+  let array = [
+    {
+      examples: ["He carefully ______ the onions into small pieces before adding them to the pot of soup."],
+      word: "chop"
+    },
+    {word: "drown"},
+  ];
+
+// to foreach the array, and put the data into tbody. and use Promise to wait the data.
+
+  await Promise.all(
+    array.map(async (row) => {
+      if (!row.examples) {
+        let examples = await generateExamples(row.word);
+        row.examples = examples;
+      }
+    })
+  );
+
+  array.forEach(function (row) {
+    tbody += "<tr>";
+    tbody += "<td>" + row.examples + "</td>";
+    tbody += "<td>" + row.word + "</td>";
+    tbody += "</tr>";
+  });
+  tbody += "</tbody>";
+
+  let options = {
+    format: "A4",
+    orientation: "portrait",
+    timeout: "12000",
+    base: "",
+  };
+
+  let htmlTemplate = fs.readFileSync("./base/Template.html", "utf8");
 
 // put tbody into html template.
-htmlTemplate = htmlTemplate.replace(PLACEHOLDER, tbody);
+  htmlTemplate = htmlTemplate.replace(PLACEHOLDER, tbody);
 
 // to create pdf
-pdf.create(htmlTemplate, options).toFile("./test.pdf", function (err, result) {
-  if (err) return console.log(err);
-  console.log("pdf create ");
-});
+  pdf.create(htmlTemplate, options).toFile("./test.pdf", function (err, result) {
+    if (err) return console.log(err);
+    console.log("pdf create ");
+  });
+}
+
+main();
