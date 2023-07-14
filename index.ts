@@ -8,7 +8,7 @@ let pdf = require("html-pdf");
 const path = require("path");
 
 // use openAI
- const { generateExamples } = require("./src/openaiConf");
+ const { generateExamples } = require("./src/basicgenerators/openaiConf");
 
 let fs = require("fs");
 global.appRoot = path.resolve(__dirname);
