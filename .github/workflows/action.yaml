@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.MY_OPEN_KEY }}
     strategy:
       matrix:
         node: [ 16, 18 ]
