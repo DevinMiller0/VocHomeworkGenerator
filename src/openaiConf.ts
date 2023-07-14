@@ -1,5 +1,6 @@
 //This uses the openai library to generate examples of a given word. The code requires an OpenAI API key to work, which is expected to be stored in the environment variable OPENAI_API_KEY.
-
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
@@ -13,15 +14,15 @@ const openai = new OpenAIApi(configuration);
 export async function generateExamples(word) {
 
   if (!process.env.OPENAI_API_KEY){
-    console.log("Please set OPENAI_API_KEY in environment variable.");
-    return;
+    console.error("Please set OPENAI_API_KEY in environment variable.");
+    throw new Error("Please set OPENAI_API_KEY in environment variable.");
   }
 
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `I am learning word: ${word}. Please generate examples that according to the word. 
-      For the count of examples, if it has 2 type of meanings like verb and noun, you can just generate 2 examples for those types of POS.
+      For the count of examples, if it has 2 type of meanings like verb and noun, you can just generate 2 examples for those types of POS(verb,noun and adj .etc).
       And replace the word in example sentence with blank. So this sentence like a homework question.
       `,
     });

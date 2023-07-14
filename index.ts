@@ -28,6 +28,7 @@ async function main() {
       word: "chop"
     },
     {word: "drown"},
+    {word: "hot"},
   ];
 
 // to foreach the array, and put the data into tbody. and use Promise to wait the data.
