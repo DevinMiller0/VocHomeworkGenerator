@@ -1,10 +1,9 @@
 # VocHomeworkGenerator
 
 ## 1. Introduction
-Every non-English person has to learn vocabulary. So many people learn with remember word but dont know
-how to use them in a full sentences.
-This is a tool to help people to solve this trouble.
+Every non-English person has to learn vocabulary. So many people learn vocabulary but do not know how to utilize them in whole sentences.
+This is a tool to assist individuals in resolving this issue.
 
-It generates a PDF file with some question with blank that should be fill with vocabs.
-You can print it and fill it out. It is a good way to learn vocabulary with use.
+It generates a PDF file with several blank questions that need be filled in with vocabs.
+You can print it and complete it. It is a fantastic technique to learn vocabulary through application.
 
