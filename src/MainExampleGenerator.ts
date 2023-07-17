@@ -1,6 +1,5 @@
 // An entry file for generating example sentences of vocabs.
-
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const FreeDictAPI = require("./basicgenerators/freedictApi.ts");
