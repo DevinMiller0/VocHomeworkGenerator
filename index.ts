@@ -8,14 +8,12 @@ let pdf = require("html-pdf");
 const path = require("path");
 
 // use openAI
- const { generateExamples } = require("./src/basicgenerators/openaiConf");
+const { generateExamplesFromMain } = require("./src/MainExampleGenerator");
 
 let fs = require("fs");
 global.appRoot = path.resolve(__dirname);
 
 const PLACEHOLDER = "{TBBODY}";
-
-
 
 async function main() {
   let tbody = "";
@@ -24,29 +22,36 @@ async function main() {
 
   let array = [
     {
-      examples: ["He carefully ______ the onions into small pieces before adding them to the pot of soup."],
-      word: "chop"
+      examples: [
+        "He carefully ______ the onions into small pieces before adding them to the pot of soup.",
+      ],
+      word: "chop",
     },
-    {word: "drown"},
-    {word: "hot"},
+    { word: "drown" },
+    { word: "hot" },
   ];
 
-// to foreach the array, and put the data into tbody. and use Promise to wait the data.
+  // to foreach the array, and put the data into tbody. and use Promise to wait the data.
 
   await Promise.all(
     array.map(async (row) => {
       if (!row.examples) {
-        let examples = await generateExamples(row.word);
+        let examples = await generateExamplesFromMain(row.word,true);
         row.examples = examples;
       }
-    })
+    }),
   );
 
   array.forEach(function (row) {
-    tbody += "<tr>";
-    tbody += "<td>" + row.examples + "</td>";
-    tbody += "<td>" + row.word + "</td>";
-    tbody += "</tr>";
+
+    // to foreach row.examples
+    for(let i = 0; i < row.examples.length; i++) {
+      tbody += "<tr>";
+      tbody += "<td>" + row.examples[i] + "</td>";
+      tbody += "<td>" + row.word + "</td>";
+      tbody += "</tr>";
+    }
+
   });
   tbody += "</tbody>";
 
@@ -59,14 +64,16 @@ async function main() {
 
   let htmlTemplate = fs.readFileSync("./base/Template.html", "utf8");
 
-// put tbody into html template.
+  // put tbody into html template.
   htmlTemplate = htmlTemplate.replace(PLACEHOLDER, tbody);
 
-// to create pdf
-  pdf.create(htmlTemplate, options).toFile("./test.pdf", function (err, result) {
-    if (err) return console.log(err);
-    console.log("pdf create ");
-  });
+  // to create pdf
+  pdf
+    .create(htmlTemplate, options)
+    .toFile("./test.pdf", function (err, result) {
+      if (err) return console.log(err);
+      console.log("pdf create ");
+    });
 }
 
 main();

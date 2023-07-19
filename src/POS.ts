@@ -4,65 +4,28 @@
 
 // Define lists of different word types/POS.
 
+const NOUN_LIST = ["n.", "noun"];
+const VERB_LIST = ["v.", "vt.", "vi.", "verb"];
 
-const NOUN_LIST = [
-  "n.",
-  "noun"
-]
-const VERB_LIST = [
-  "v.",
-  "vt.",
-  "vi.",
-  "verb"
-]
+const ADJECTIVE_LIST = ["adj.", "adjective"];
 
-const ADJECTIVE_LIST = [
-  "adj.",
-  "adjective"
-]
+const ADVERB_LIST = ["adv.", "adverb"];
 
-const ADVERB_LIST = [
-  "adv.",
-  "adverb"
-]
+const PREPOSITION_LIST = ["prep.", "preposition"];
 
-const PREPOSITION_LIST = [
-  "prep.",
-  "preposition"
-]
+const CONJUNCTION_LIST = ["conj.", "conjunction"];
 
-const CONJUNCTION_LIST = [
-  "conj.",
-  "conjunction"
-]
+const INTERJECTION_LIST = ["interj.", "interjection"];
 
-const INTERJECTION_LIST = [
-  "interj.",
-  "interjection"
-]
+const PRONOUN_LIST = ["pron.", "pronoun"];
 
-const PRONOUN_LIST = [
-  "pron.",
-  "pronoun"
-]
+const ARTICLE_LIST = ["art.", "article"];
 
-const ARTICLE_LIST = [
-  "art.",
-  "article"
-]
+const ABBREVIATION_LIST = ["abbr.", "abbreviation"];
 
-const ABBREVIATION_LIST = [
-  "abbr.",
-  "abbreviation"
-]
+const PREFIX_LIST = ["prefix"];
 
-const PREFIX_LIST = [
-  "prefix"
-]
-
-const SUFFIX_LIST = [
-  "suffix"
-]
+const SUFFIX_LIST = ["suffix"];
 
 module.exports = {
   NOUN_LIST,
@@ -76,5 +39,5 @@ module.exports = {
   ARTICLE_LIST,
   ABBREVIATION_LIST,
   PREFIX_LIST,
-  SUFFIX_LIST
-}
+  SUFFIX_LIST,
+};

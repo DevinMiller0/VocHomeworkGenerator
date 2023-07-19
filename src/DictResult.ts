@@ -1,5 +1,4 @@
-
-interface DictApiResponse {
+export interface DictApiResponse {
   response: string;
   code: number;
   isSuccess: boolean;
@@ -12,17 +11,16 @@ interface DictApiResponse {
 // Doc: "https://api.dictionaryapi.dev/api/v2/entries/en/"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class FreeDictRsp implements DictApiResponse {
-
-  constructor(rsp: Response) {
+  constructor(rsp: Response, text: string) {
     const code = rsp.status;
     this.code = code;
     const isSuccess = code === 200;
     this.isSuccess = isSuccess;
 
     // asign it regardless of isSuccess.
-    this.response = rsp.json().toString();
+    this.response = text;
+    // console.log(this.response);
   }
-
 
   code: number;
   isSuccess: boolean;
@@ -32,33 +30,33 @@ export class FreeDictRsp implements DictApiResponse {
   //rewrite extractPOS() and extractSentences() to extract data from this object.
 
   extractErrorMsg(): string {
-    if(this.isSuccess) throw new Error("No error message.");
+    if (this.isSuccess) throw new Error("No error message.");
 
     return JSON.parse(this.response).title;
   }
 
   extractSentences(): string[] {
-
     if (!this.isSuccess) throw new Error("Can do this.");
 
-    const {meanings} = JSON.parse(this.response)[0];
+    const { meanings } = JSON.parse(this.response)[0];
 
-    const exmples = [];
+    const exmples: string[] = [];
     for (const meaning of meanings) {
-      const {definitions} = meaning;
+      const { definitions } = meaning;
       for (const definition of definitions) {
-        const {example} = definition;
+        const { example } = definition;
         if (example) {
           exmples.push(example);
         }
       }
     }
+    return exmples;
   }
 
   extractPOS(): string[] {
-    if(!this.isSuccess) throw new Error("Can do this.");
+    if (!this.isSuccess) throw new Error("Can do this.");
 
-    const POSs= [];
+    const POSs = [];
     const { meanings } = JSON.parse(this.response)[0];
     for (const meaning of meanings) {
       POSs.push(meaning.partOfSpeech);
@@ -68,27 +66,50 @@ export class FreeDictRsp implements DictApiResponse {
 }
 
 // doc: https://www.free-api.com/doc/517
-class IcibaDictRsp implements DictApiResponse {
+export class IcibaDictRsp implements DictApiResponse {
   code: number;
   isSuccess: boolean;
   response: string;
+
+  constructor(rsp: Response, text: string) {
+    const code = rsp.status;
+    this.code = code;
+    const isSuccess = code === 200;
+    this.isSuccess = isSuccess;
+
+    // asign it regardless of isSuccess.
+    this.response = text;
+    // console.log(this.response);
+  }
 
   extractErrorMsg(): string {
     return "";
   }
 
   extractPOS(): string[] {
-    return [];
+    if (!this.isSuccess) throw new Error("Can do this.");
+
+    const POSs = [];
+    const { means } = JSON.parse(this.response)["message"][0];
+    for (const meaning of means) {
+      POSs.push(meaning.part);
+    }
+    return POSs;
+  }
+
+  extractCNMeans(part: string): string[] {
+    let submeans = [];
+    const { means } = JSON.parse(this.response)["message"][0];
+    for (const meaning of means) {
+      if (meaning.part == part) submeans = meaning.means;
+    }
+    return submeans;
   }
 
   extractSentences(): string[] {
     return [];
   }
-
 }
-
-
-
 
 class DictApiData {
   private sentences: string[];
@@ -98,7 +119,6 @@ class DictApiData {
 
   private rsp: DictApiResponse;
 
-
   // param rsp: Could from Iciba and freedict
   constructor(rsp: DictApiResponse) {
     this.rsp = rsp;
@@ -106,11 +126,10 @@ class DictApiData {
     this.pos = rsp.extractPOS();
     this.errorMsg = rsp.extractErrorMsg();
   }
-
 }
 
 module.exports = {
   FreeDictRsp,
   IcibaDictRsp,
   DictApiData,
-}
+};
