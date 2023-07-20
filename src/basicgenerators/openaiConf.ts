@@ -2,13 +2,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const { Configuration, OpenAIApi } = require("openai");
-
+import ChatGPT from './openai_stream.ts';
 const DEFAULT_MODEL = "text-davinci-003";
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
 
 //The function is defined as an asynchronous function, which means it returns a promise that will resolve with the generated examples. If an error occurs during the execution of the function, the catch block will log the error message to console.
 // 函数实现，参数单位 毫秒 ；
@@ -24,16 +19,15 @@ export async function generateExamples(word, pos) {
   }
   await wait(7000);
 
-  try {
-    const completion = await openai.createCompletion({
-      model: DEFAULT_MODEL,
-      prompt:  pos ? `I am learning word: ${word}.  Please generate examples that according to the word. 
+  const prompt= pos ? `I am learning word: ${word}.  Please generate examples that according to the word. 
       For the count of examples, if it has 2 type of meanings like verb and noun, you can just generate 2 examples for those types of POS(verb,noun and adj .etc).
       And replace the word in example sentence with blank. So this sentence like a homework question.`
-      : `I am learning word: ${word} as ${pos}.  Please generate an example for the word.`,
-    });
-    console.log(completion.data.choices[0].text);
-    return completion.data.choices[0].text;
+    : `I am learning word: ${word} as ${pos}.  Please generate an example for the word.`;
+  try {
+
+    const completion = await ChatGPT.createSimpleCompletion(prompt);
+
+    return completion;
   } catch (error) {
     if (error.response) {
       console.log(error.response.status);
@@ -64,14 +58,12 @@ export async function generateExamplesByCNMean(word, pos, cnmeans) {
 
   await wait(20000); // due to free openai account
   try {
-    const completion = await openai.createCompletion({
-      model: DEFAULT_MODEL,
-      prompt: `${firstLine}
+    const prompt = `${firstLine}
       Also, remember to replace the words in the example phrases with blanks. So those sentences appear to be homework questions. And the sentences must be separated by new line char.
-      `,
-    });
-    console.log(completion.data.choices[0].text);
-    return completion.data.choices[0].text;
+      `;
+
+    const completion = await ChatGPT.createSimpleCompletion(prompt);
+    return completion;
   } catch (error) {
     if (error.response) {
       console.log(error.response.status);
