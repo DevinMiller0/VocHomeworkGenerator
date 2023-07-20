@@ -29,18 +29,17 @@ async function main() {
     },
     { word: "drown" },
     { word: "hot" },
+    { word: "puzzled" },
   ];
 
   // to foreach the array, and put the data into tbody. and use Promise to wait the data.
+  for (const row of array) {
+    if (!row.examples) {
+      let examples = await generateExamplesFromMain(row.word,true);
+      row.examples = examples;
+    }
+  }
 
-  await Promise.all(
-    array.map(async (row) => {
-      if (!row.examples) {
-        let examples = await generateExamplesFromMain(row.word,true);
-        row.examples = examples;
-      }
-    }),
-  );
 
   array.forEach(function (row) {
 

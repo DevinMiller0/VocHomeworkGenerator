@@ -65,6 +65,8 @@ export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<strin
 
     const completion = await ChatGPT.createSimpleCompletion(prompt);
     console.log(`completion: ${completion}`);
+
+    await wait(20 * 1000); // due to free openai account
     return completion.split('\n');
   } catch (error) {
     if (error.response) {
@@ -74,10 +76,11 @@ export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<strin
     } else {
       console.log(error.message);
     }
+
+    await wait(20 * 1000); // due to free openai account
   }
 
 
-  await wait(20000- (Date.now() - begin)); // due to free openai account
 }
 
 
