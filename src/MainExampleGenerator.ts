@@ -26,7 +26,9 @@ export async function generateExamplesFromMain(word:string, isVip: boolean) {
       const cnMeans = icibaData.extractCNMeans(p);
 
       console.log(cnMeans);
-      result.push(await OpenAIAPI.generateExamplesByCNMean(word, p, cnMeans));
+      const openaisentences:string[] = await OpenAIAPI.generateExamplesByCNMean(word, p, cnMeans)
+      //push openai sentences into another array: result
+      result.push(...openaisentences);
     }
 
   }

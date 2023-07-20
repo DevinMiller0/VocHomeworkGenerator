@@ -41,7 +41,7 @@ export async function generateExamples(word, pos) {
 
 
 
-export async function generateExamplesByCNMean(word, pos, cnmeans) {
+export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<string[]> {
   if(!word || !pos || !cnmeans) {
     console.error("Please set word, pos and cnmeans.");
     throw new Error("Please set word, pos and cnmeans.");
@@ -56,14 +56,16 @@ export async function generateExamplesByCNMean(word, pos, cnmeans) {
     throw new Error("Please set OPENAI_API_KEY in environment variable.");
   }
 
-  await wait(20000); // due to free openai account
+  const begin = Date.now();
+
   try {
     const prompt = `${firstLine}
       Also, remember to replace the words in the example phrases with blanks. So those sentences appear to be homework questions. And the sentences must be separated by new line char.
       `;
 
     const completion = await ChatGPT.createSimpleCompletion(prompt);
-    return completion;
+    console.log(`completion: ${completion}`);
+    return completion.split('\n');
   } catch (error) {
     if (error.response) {
       console.log(error.response.status);
@@ -73,6 +75,9 @@ export async function generateExamplesByCNMean(word, pos, cnmeans) {
       console.log(error.message);
     }
   }
+
+
+  await wait(20000- (Date.now() - begin)); // due to free openai account
 }
 
 
