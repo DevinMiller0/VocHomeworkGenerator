@@ -5,6 +5,9 @@ const { Configuration, OpenAIApi } = require("openai");
 import ChatGPT from './openai_stream.ts';
 const DEFAULT_MODEL = "text-davinci-003";
 
+// due to free openai account.
+const OPENAI_LIMITED_RPM = 3;
+
 //The function is defined as an asynchronous function, which means it returns a promise that will resolve with the generated examples. If an error occurs during the execution of the function, the catch block will log the error message to console.
 // 函数实现，参数单位 毫秒 ；
 async function wait(ms) {
@@ -22,8 +25,9 @@ function onRequestBegin(){
 async function onRequestEnd(){
   const now = new Date().getTime();
   const diff = now - lastime;
-  if(diff < 5000) {
-    await wait(20000 - diff);
+  const interval = 60*1000/OPENAI_LIMITED_RPM;
+  if(diff < interval) {
+    await wait(interval - diff);
   }
 }
 
@@ -62,12 +66,12 @@ export async function generateExamples(word, pos) {
 
 
 export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<string[]> {
-  if(!word || !pos || !cnmeans) {
+  if(!word || !pos || !cnmeans || cnmeans.length === 0) {
     console.error("Please set word, pos and cnmeans.");
     throw new Error("Please set word, pos and cnmeans.");
   }
 
-  const firstLine = `I am a Chinese  and learning the word: ${word} as type : "${pos}". I need some examples by Chinese meanings : [${cnmeans}].  Please generate several English sentences for all of the Chinese meanings.`;
+  const firstLine = `I am a Chinese guy and learning the word: ${word} as type : "${pos}". I need some examples by Chinese meanings : [${cnmeans}].  Please generate ${cnmeans.length} English sentences for ${cnmeans.length>1? 'all of' :''} the Chinese meaning${cnmeans.length>1? 's' : '' }.`;
 
   console.log(firstLine);
 
@@ -79,7 +83,8 @@ export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<strin
 
   try {
     const prompt = `${firstLine}
-      Also, remember to replace the words in the example phrases with blanks. So those sentences appear to be homework questions. And the sentences must be separated by new line char.
+      ${cnmeans.length>1? 'Also, remember to replace the words in the example sentences with blanks. So those sentences appear to be homework questions. And the sentences must be separated by new line char.'
+      : 'Also, remember to replace the word in the example sentence with blank. So this sentence appears to be a homework question.'}
       `;
 
     const completion = await ChatGPT.createSimpleCompletion(prompt);
