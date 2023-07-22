@@ -12,12 +12,27 @@ async function wait(ms) {
 }
 
 
+
+let lastime = new Date().getTime();
+function onRequestBegin(){
+  lastime = new Date().getTime();
+}
+
+// due to limitation of 3 RPM for openai free account, we need to wait 20s for each request.
+async function onRequestEnd(){
+  const now = new Date().getTime();
+  const diff = now - lastime;
+  if(diff < 5000) {
+    await wait(20000 - diff);
+  }
+}
+
 export async function generateExamples(word, pos) {
   if (!process.env.OPENAI_API_KEY) {
     console.error("Please set OPENAI_API_KEY in environment variable.");
     throw new Error("Please set OPENAI_API_KEY in environment variable.");
   }
-  await wait(7000);
+  onRequestBegin();
 
   const prompt= pos ? `I am learning word: ${word}.  Please generate examples that according to the word. 
       For the count of examples, if it has 2 type of meanings like verb and noun, you can just generate 2 examples for those types of POS(verb,noun and adj .etc).
@@ -25,8 +40,10 @@ export async function generateExamples(word, pos) {
     : `I am learning word: ${word} as ${pos}.  Please generate an example for the word.`;
   try {
 
+
     const completion = await ChatGPT.createSimpleCompletion(prompt);
 
+    await onRequestEnd();
     return completion;
   } catch (error) {
     if (error.response) {
@@ -35,6 +52,9 @@ export async function generateExamples(word, pos) {
     } else {
       console.log(error.message);
     }
+
+    await onRequestEnd();
+    return [error.response.data.message  || 'openai: unknown error'];
   }
 
 }
@@ -55,8 +75,7 @@ export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<strin
     console.error("Please set OPENAI_API_KEY in environment variable.");
     throw new Error("Please set OPENAI_API_KEY in environment variable.");
   }
-
-  const begin = Date.now();
+  onRequestBegin()
 
   try {
     const prompt = `${firstLine}
@@ -66,20 +85,20 @@ export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<strin
     const completion = await ChatGPT.createSimpleCompletion(prompt);
     console.log(`completion: ${completion}`);
 
-    await wait(20 * 1000); // due to free openai account
+    await onRequestEnd();
     return completion.split('\n');
   } catch (error) {
     if (error.response) {
       console.log(error.response.status);
       console.log(error.response.data);
-      return error.response.data.code || error.response.data.message  || 'openai: unknown error';
     } else {
       console.log(error.message);
     }
 
-    await wait(20 * 1000); // due to free openai account
-  }
+    await onRequestEnd();
 
+    return [error.response?.data?.message  || 'openai: unknown error'];
+  }
 
 }
 
