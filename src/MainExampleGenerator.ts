@@ -19,6 +19,7 @@ export async function generateExamplesFromMain(word:string, isVip: boolean) {
 
   const pos = icibaData.extractPOS();
 
+  // 2. use openai to generate examples with pos and cnmeans, which is from iciba data.
   const result = [];
   if(isVip) {
     const postMapCNMeanings = {};
@@ -32,9 +33,14 @@ export async function generateExamplesFromMain(word:string, isVip: boolean) {
     }
 
   }
+  else {
+    const freedictData: FreeDictRsp = await FreeDictAPI.fetchFromFreeDict(word);
+    const freedictSentences = freedictData.extractSentences();
 
-  // 2. free dict data
-  // const freeDictData: FreeDictRsp  = await FreeDictAPI.fetchFromFreeDict(word);
+    console.log(freedictSentences);
+    result.push(...freedictSentences);
+  }
+
 
   console.log(`generateExamplesFromMai: ${word} .`);
 

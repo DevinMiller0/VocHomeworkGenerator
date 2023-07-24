@@ -64,8 +64,15 @@ export async function generateExamples(word, pos) {
 }
 
 
-
+/**
+ * Generates examples in English based on a given word, part of speech, and Chinese meanings.
+ * @param word - The word to generate examples for.
+ * @param pos - The part of speech of the word.
+ * @param cnmeans - An array of Chinese meanings.
+ * @returns A promise that resolves to an array of generated English sentences.
+ */
 export async function generateExamplesByCNMean(word, pos, cnmeans):Promise<string[]> {
+  // Check if required parameters are provided
   if(!word || !pos || !cnmeans || cnmeans.length === 0) {
     console.error("Please set word, pos and cnmeans.");
     throw new Error("Please set word, pos and cnmeans.");

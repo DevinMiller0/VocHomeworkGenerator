@@ -36,7 +36,7 @@ async function main() {
   // to foreach the array, and put the data into tbody. and use Promise to wait the data.
   for (const row of array) {
     if (!row.examples) {
-      let examples = await generateExamplesFromMain(row.word,true);
+      let examples = await generateExamplesFromMain(row.word,false);
       row.examples = examples;
     }
   }
