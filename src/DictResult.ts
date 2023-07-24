@@ -1,3 +1,5 @@
+import {isSentence} from "./utils/SentenceHelper.ts";
+
 export interface DictApiResponse {
   response: string;
   code: number;
@@ -45,11 +47,21 @@ export class FreeDictRsp implements DictApiResponse {
       const { definitions } = meaning;
       for (const definition of definitions) {
         const { example } = definition;
-        if (example) {
+        if (example && isSentence(example)) {
           exmples.push(example);
         }
       }
     }
+
+    // If there are more than 5 examples in the list, sort them based on the length of their sentences, with longer sentences appearing first.
+    // Return the first 5 examples in the sorted list.
+    if(exmples.length > 5) {
+      exmples.sort((a, b) => {
+        return b.length - a.length;
+      });
+      return exmples.slice(0, 5);
+    }
+
     return exmples;
   }
 
