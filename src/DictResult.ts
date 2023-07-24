@@ -118,6 +118,7 @@ export class IcibaDictRsp implements DictApiResponse {
     return submeans;
   }
 
+  // this dict platform doesn't provide sentences.
   extractSentences(): string[] {
     return [];
   }

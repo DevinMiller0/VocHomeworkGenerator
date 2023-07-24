@@ -5,6 +5,7 @@
 import { fetchFromFreeDict } from "./basicgenerators/freedictApi";
 import { FreeDictRsp, IcibaDictRsp } from "./DictResult";
 import {generateExamples, generateExamplesByCNMean} from "./basicgenerators/openaiConf";
+import {replaceWordWithBlank} from "./utils/SentenceHelper.ts";
 
 const FreeDictAPI = require("./basicgenerators/freedictApi.ts");
 const OpenAIAPI = require("./basicgenerators/openaiConf.ts");
@@ -44,11 +45,10 @@ export async function generateExamplesFromMain(word:string, isVip: boolean) {
 
   console.log(`generateExamplesFromMai: ${word} .`);
 
-  //
-  // console.log(freeDictData.extractSentences());
-  // console.log(freeDictData.extractPOS());
-
-  //3. to fill with openai data.
+  // to use function "replaceWordWithBlank" to make every sentence like homework.
+  for(let i = 0; i < result.length; i++) {
+    result[i] = replaceWordWithBlank(result[i], word);
+  }
 
   return result
 }

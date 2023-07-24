@@ -1,7 +1,7 @@
 import "mocha";
 import { expect } from "chai";
 
-import { isWord, isSentence } from '../src/utils/SentenceHelper';
+import { isWord, isSentence, replaceWordWithBlank } from '../src/utils/SentenceHelper';
 
 describe('WordHelper', () => {
   describe('isWord', () => {
@@ -49,4 +49,44 @@ describe('WordHelper', () => {
       expect(result).false;
     });
   });
+
+
+
+  describe('replaceWordWithBlank', () => {
+    it('should replace the word in the sentence with blank', () => {
+      const sentence = 'I ate an apple.';
+      const word = 'ate';
+      const expected = 'I ___ an apple.';
+      const result = replaceWordWithBlank(sentence, word);
+      expect(result).equals(expected);
+    });
+
+    it('should return the same sentence if it already contains a blank', () => {
+      const sentence = 'I ___ an apple.';
+      const word = 'ate';
+      const result = replaceWordWithBlank(sentence, word);
+      expect(result).equals(sentence);
+    });
+
+
+    it('should return a new sentence if it already contains a blank', () => {
+      const sentence = 'I __ate__ an apple.';
+      const word = 'ate';
+      const result = replaceWordWithBlank(sentence, word);
+
+      const expected = 'I ___ an apple.';
+      expect(result).equals(expected);
+    });
+
+    it('should throw an error if the sentence does not include the word', () => {
+      const sentence = 'I ate an apple.';
+      const word = 'banana';
+      expect(() => {
+        replaceWordWithBlank(sentence, word);
+      }).throws('The sentence does not include the word.');
+    });
+
+  });
+
+
 });
