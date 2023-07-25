@@ -9,6 +9,8 @@ It generates a PDF file with several blank questions that need be filled in with
 You can print it and complete it. It is a fantastic technique to learn vocabulary through application.
 
 
+## features
+
 - [X] generate sentences by openai.
 - [X] generate sentence by request freedict.
 - [X] import vocabs from JSON.
