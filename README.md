@@ -11,8 +11,8 @@ You can print it and complete it. It is a fantastic technique to learn vocabular
 
 ## features
 
-- [X] generate sentences by openai.
-- [X] generate sentence by request freedict.
+- [X] generate sentences by calling openAI with every meanings.
+- [X] generate sentence by requesting Freedict.
 - [X] import vocabs from JSON.
 - [ ] import vocabs from PDF.
 - [ ] import vocabs from images.
